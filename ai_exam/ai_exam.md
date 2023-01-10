@@ -399,21 +399,21 @@ t_ij = t_ij * (1 - r).
 
   forward: 
   ```
-  A0 = X^T
-  X1 = W1^T x A0   | (3, 1)
-  A1 = f1(X1)   | (3, 1)
-  X2 = W2^T x A1   | (2, 1)
-  A2 = f2(X2)   | (2, 1)
+  A0 = X
+  X1 = A0 x W1      | (1, 3)
+  A1 = f1(X1)       | (1, 3)
+  X2 = A1 x W2      | (1, 2)
+  A2 = f2(X2)       | (1, 2)
   loss = L(A2, Y)   | (1)
   ```
   
   backward:
   ```
-  E2 = dloss/dW2 = dloss/dA2 * df2/dX2   | (2, 1)
-  E1 = dloss/dW1 = (W2 x E2) * df1/dX1   | (3, 1)
+  E2 = dloss/dW2 = (y - p) * da2/dX2   | (1, 2)
+  E1 = dloss/dW1 = (E2 x W2^T) * da1/dx1   | (1, 3)
   
-  dloss/dW2 = A1 x E2^T   | (3, 2)
-  dloss/dW1 = A0 x E1^T   | (4, 3)
+  dloss/dW2 = A1^T x E2   | (3, 2)
+  dloss/dW1 = A0^T x E1   | (4, 3)
 
   W2 = W2 - lr * dloss/dW2
   W1 = W1 - lr * dloss/dW1
